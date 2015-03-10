@@ -11,7 +11,7 @@
  * Input:   list (optional)
  * Output:  sorted list
  *
- * IPP:     Section 3.7.1 (pp. 127 and ff.) and Section 5.6.1 
+ * IPP:     Section 3.7.1 (pp. 127 and ff.) and Section 5.6.1
  *          (pp. 232 and ff.)
  */
 #include <stdio.h>
@@ -28,28 +28,29 @@ void Generate_list(int a[], int n);
 void Print_list(int a[], int n, char* title);
 void Read_list(int a[], int n);
 void Bubble_sort(int a[], int n);
+void Bubble_sort_parallel(int a[], int n);
 
 /*-----------------------------------------------------------------*/
 int main(int argc, char* argv[]) {
-   int  n;
-   char g_i;
-   int* a;
-
-   Get_args(argc, argv, &n, &g_i);
-   a = (int*) malloc(n*sizeof(int));
-   if (g_i == 'g') {
-      Generate_list(a, n);
-      Print_list(a, n, "Before sort");
-   } else {
-      Read_list(a, n);
-   }
-
-   Bubble_sort(a, n);
-
-   Print_list(a, n, "After sort");
-   
-   free(a);
-   return 0;
+    int  n;
+    char g_i;
+    int* a;
+    
+    Get_args(argc, argv, &n, &g_i);
+    a = (int*) malloc(n*sizeof(int));
+    if (g_i == 'g') {
+        Generate_list(a, n);
+        Print_list(a, n, "Before sort");
+    } else {
+        Read_list(a, n);
+    }
+    
+    Bubble_sort_parallel(a, n);
+    
+    Print_list(a, n, "After sort");
+    
+    free(a);
+    return 0;
 }  /* main */
 
 
@@ -58,10 +59,10 @@ int main(int argc, char* argv[]) {
  * Purpose:   Summary of how to run program
  */
 void Usage(char* prog_name) {
-   fprintf(stderr, "usage:   %s <n> <g|i>\n", prog_name);
-   fprintf(stderr, "   n:   number of elements in list\n");
-   fprintf(stderr, "  'g':  generate list using a random number generator\n");
-   fprintf(stderr, "  'i':  user input list\n");
+    fprintf(stderr, "usage:   %s <n> <g|i>\n", prog_name);
+    fprintf(stderr, "   n:   number of elements in list\n");
+    fprintf(stderr, "  'g':  generate list using a random number generator\n");
+    fprintf(stderr, "  'i':  user input list\n");
 }  /* Usage */
 
 
@@ -72,17 +73,17 @@ void Usage(char* prog_name) {
  * Out args:  n_p, g_i_p
  */
 void Get_args(int argc, char* argv[], int* n_p, char* g_i_p) {
-   if (argc != 3 ) {
-      Usage(argv[0]);
-      exit(0);
-   }
-   *n_p = atoi(argv[1]);
-   *g_i_p = argv[2][0];
-
-   if (*n_p <= 0 || (*g_i_p != 'g' && *g_i_p != 'i') ) {
-      Usage(argv[0]);
-      exit(0);
-   }
+    if (argc != 3 ) {
+        Usage(argv[0]);
+        exit(0);
+    }
+    *n_p = atoi(argv[1]);
+    *g_i_p = argv[2][0];
+    
+    if (*n_p <= 0 || (*g_i_p != 'g' && *g_i_p != 'i') ) {
+        Usage(argv[0]);
+        exit(0);
+    }
 }  /* Get_args */
 
 
@@ -93,11 +94,11 @@ void Get_args(int argc, char* argv[], int* n_p, char* g_i_p) {
  * Out args:  a
  */
 void Generate_list(int a[], int n) {
-   int i;
-
-   srandom(0);
-   for (i = 0; i < n; i++)
-      a[i] = random() % RMAX;
+    int i;
+    
+    srandom(0);
+    for (i = 0; i < n; i++)
+        a[i] = random() % RMAX;
 }  /* Generate_list */
 
 
@@ -107,12 +108,12 @@ void Generate_list(int a[], int n) {
  * In args:   a, n
  */
 void Print_list(int a[], int n, char* title) {
-   int i;
-
-   printf("%s:\n", title);
-   for (i = 0; i < n; i++)
-      printf("%d ", a[i]);
-   printf("\n\n");
+    int i;
+    
+    printf("%s:\n", title);
+    for (i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n\n");
 }  /* Print_list */
 
 
@@ -123,11 +124,11 @@ void Print_list(int a[], int n, char* title) {
  * Out args:  a
  */
 void Read_list(int a[], int n) {
-   int i;
-
-   printf("Please enter the elements of the list\n");
-   for (i = 0; i < n; i++)
-      scanf("%d", &a[i]);
+    int i;
+    
+    printf("Please enter the elements of the list\n");
+    for (i = 0; i < n; i++)
+        scanf("%d", &a[i]);
 }  /* Read_list */
 
 
@@ -138,18 +139,18 @@ void Read_list(int a[], int n) {
  * In/out args:  a
  */
 void Bubble_sort(
-      int  a[]  /* in/out */, 
-      int  n    /* in     */) {
-   int list_length, i, temp;
-
-   for (list_length = n; list_length >= 2; list_length--)
-      for (i = 0; i < list_length-1; i++)
-         if (a[i] > a[i+1]) {
-            temp = a[i];
-            a[i] = a[i+1];
-            a[i+1] = temp;
-         }
-
+                 int  a[]  /* in/out */,
+                 int  n    /* in     */) {
+    int list_length, i, temp;
+    
+    for (list_length = n; list_length >= 2; list_length--)
+        for (i = 0; i < list_length-1; i++)
+            if (a[i] > a[i+1]) {
+                temp = a[i];
+                a[i] = a[i+1];
+                a[i+1] = temp;
+            }
+    
 }  /* Bubble_sort */
 
 
@@ -160,48 +161,47 @@ void Bubble_sort(
  * In/out args:  a
  */
 void Bubble_sort_parallel(
-      int  a[]  /* in/out */, 
-      int  n    /* in     */) {
-   int list_length, i, temp;
-
-   int numLock=0;
-   int ordered=0;
-   int change=0;
-   
-   int indice=0;
-   int bloco=n/NUM_THR;
-   
-   int offsetValue[NUM_THR];
-   omp_lock_t locks[NUM_THR];
-
-   for(i=0;i<NUM_THR;i++)
-      omp_init_lock(&(locks[i]));
-
-   for (i=0;i<NUM_THR;i++)
-      offsetValue[i]=(i+1)*bloco;
-
-#pragma omp parallel shared(list_length,a,bloco) private(i,numLock,change,temp) 
-   while (!ordered){
-      change = 0;
-      numLock = 0;
-      omp_set_lock(&(locks[0]));
-
-      for (i = 0; i < list_length-1; i++){
-         if (a[i] > a[i+1]) {
-            temp = a[i];
-            a[i] = a[i+1];
-            a[i+1] = temp;
-         }
-         if (i==offsetValue[numLock]) {
-            numLock++;
-            omp_unset_lock(&(locks[(numLock-1)]));
-            omp_set_lock(&(locks[(numLock)]));
-         }
-         if (change==0)
+                          int  a[]  /* in/out */,
+                          int  n    /* in     */) {
+    int list_length=n, i, temp;
+    
+    int numLock=0;
+    int ordered=0;
+    int change=0;
+    
+    int bloco=n/NUM_THR;
+    
+    int offsetValue[NUM_THR];
+    omp_lock_t locks[NUM_THR+1];
+    
+    for(i=0;i<=NUM_THR;i++)
+        omp_init_lock(&(locks[i]));
+    
+    for (i=0;i<NUM_THR;i++)
+        offsetValue[i]=(i+1)*bloco;
+    
+#pragma omp parallel shared(list_length,a,bloco) private(i,numLock,change,temp)
+    while (!ordered){
+        change = 0;
+        numLock = 0;
+        omp_set_lock(&(locks[0]));
+        
+        for (i = 0; i < list_length-1; i++){
+            if (a[i] > a[i+1]) {
+                temp = a[i];
+                a[i] = a[i+1];
+                a[i+1] = temp;
+                change=1;
+            }
+            if (i==offsetValue[numLock]) {
+                omp_set_lock(&(locks[(numLock+1)]));
+                omp_unset_lock(&(locks[(numLock)]));
+                numLock++;
+            }
+        }
+        if (change==0)
             ordered=1;
-            
-         list_length--;
-      }
-      omp_unset_lock(&(locks[(numLock)]));
-   }
+        list_length--;
+        omp_unset_lock(&(locks[(numLock)]));
+    }
 }  /* Bubble_sort_parallel */

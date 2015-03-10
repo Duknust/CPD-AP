@@ -1,0 +1,20 @@
+Funcionamento:
+
+As principais opções no desenvolvimento do código em OpenMP foram 
+a divisão por blocos aos quais correspondem os locks, são feitas 
+em função do número de threads, isto é, no caso de existir uma thread
+é usado apenas um bloco, no caso de duas threads dois blocos e igual para
+valores mais altos.
+Depois de calculado o tamanho de cada bloco são inicializados os locks e todas
+as threads ficam à espera no primeiro lock excepto uma que é a primeira a conseguir 
+entrar e fazer o lock dessa "porta". Após essa thread acabar de processar esse bloco
+ela faz lock ao bloco seguinte e liberta o lock do bloco em que se encontrava para
+que outra thread possa processar esse bloco. À medida que vão sendo feitas iterações o
+tamanho util do array vai diminuindo pois o fim do array já se encontra ordenado.
+No fim do ciclo (este só para quando o array se encontra ordenado) são libertados todos 
+os locks.
+
+
+Resultados:
+
+Observando o gráfico é possível ver que quantas mais threads mais rápida é a execução do algoritmo mas para tamanhos muito pequenos o custo de criação de threads não compensa. Por isso para valores grandes é aconselhável utilizar um numero de threads alto.
