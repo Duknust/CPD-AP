@@ -5,8 +5,8 @@
 #include <semaphore.h>
 #include <iostream>
 
-#define NUM_THREADS 4
-#define NUM 20
+#define NUM_THREADS 1
+#define NUM 1000000
 
 int N=NUM;  // number of elements in array X
 int X[NUM];//={3,5,2,5,7,9,-4,6,7,-3,1,7,6,8,-1,2};
@@ -36,7 +36,7 @@ void *Summation (void *pArg)
 
   inTotals[tNum]=X[end-1];
 
-  printf("numth_%d_start_%d_end_%d_mytotal_%d\n",tNum,start,end,inTotals[tNum]);
+  //printf("numth_%d_start_%d_end_%d_mytotal_%d\n",tNum,start,end,inTotals[tNum]);
 
   sem_post(&semaforo2[tNum]);
   sem_wait(&semaforo[tNum]);
@@ -73,27 +73,27 @@ int main(int argc, char* argv[])
     pthread_create(&tHandles[j], NULL, Summation, (void *)threadNum);
   }
 
-  printf("x\n");
-  printArray(X,NUM);
-  printf("\n");
+  //printf("x\n");
+  //printArray(X,NUM);
+  //printf("\n");
 
 
   for(j=0;j<NUM_THREADS;j++){
     sem_wait(&semaforo2[j]);
   }
 
-  printf("inTotals\n");
-  printArray(inTotals,NUM_THREADS);
-  printf("\n");  
+  //printf("inTotals\n");
+  //printArray(inTotals,NUM_THREADS);
+  //printf("\n");  
 
   outTotals[0]=0;
   for(j=1; j<NUM_THREADS;j++){
     outTotals[j]=inTotals[j-1]+outTotals[j-1];
   }
 
-  printf("outTotals\n");
-  printArray(outTotals,NUM_THREADS);
-  printf("\n");  
+  //printf("outTotals\n");
+  //printArray(outTotals,NUM_THREADS);
+  //printf("\n");  
 
   for (j=0;j<NUM_THREADS;j++){ //threads podem voltar a trabalhar
     sem_post(&semaforo[j]); 
